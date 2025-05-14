@@ -11,6 +11,7 @@ interface UseInstanceCheckProps {
 interface InstanceStatus {
   status: string;
   qrCode: string | null;
+  pairingCode: string | null;
   isConnected: boolean;
   loading: boolean;
 }
@@ -22,6 +23,7 @@ export const useInstanceCheck = ({
   const [status, setStatus] = useState<InstanceStatus>({
     status: "Carregando...",
     qrCode: null,
+    pairingCode: null,
     isConnected: false,
     loading: true
   });
@@ -33,6 +35,7 @@ export const useInstanceCheck = ({
       setStatus({
         status: "Instância não informada na URL.",
         qrCode: null,
+        pairingCode: null,
         isConnected: false,
         loading: false
       });
@@ -47,13 +50,17 @@ export const useInstanceCheck = ({
           setStatus({
             status: "✅ Instância Conectada",
             qrCode: null,
+            pairingCode: null,
             isConnected: true,
             loading: false
           });
-        } else if (data.qrcode) {
+        } else if (data.qrcode || data.code) {
+          // Using data.code if it exists (as in your example), otherwise fall back to data.qrcode
+          const qrCodeData = data.code || data.qrcode;
           setStatus({
             status: "⚠️ Instância Desconectada - Escaneie o QR Code",
-            qrCode: data.qrcode,
+            qrCode: qrCodeData,
+            pairingCode: data.pairingCode || null,
             isConnected: false,
             loading: false
           });
@@ -61,6 +68,7 @@ export const useInstanceCheck = ({
           setStatus({
             status: "⚠️ Status desconhecido",
             qrCode: null,
+            pairingCode: null,
             isConnected: false,
             loading: false
           });
@@ -70,6 +78,7 @@ export const useInstanceCheck = ({
         setStatus({
           status: "❌ Erro ao buscar dados da instância",
           qrCode: null,
+          pairingCode: null,
           isConnected: false,
           loading: false
         });
