@@ -40,13 +40,13 @@ export const checkInstanceConnection = async (instance: string): Promise<Connect
     // Build the request URL
     const url = `${apiUrl}/instance/connect/${instance}`;
     
-    // Create headers object with proper authorization
+    // Create request headers according to API specification
     const headers: HeadersInit = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
     
-    // Add Authorization header if API key is available
+    // Add apikey header exactly as specified in the API documentation
     if (apiKey && apiKey !== 'your-api-key-here') {
       headers['apikey'] = apiKey;
     }
