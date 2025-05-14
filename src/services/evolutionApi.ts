@@ -40,14 +40,33 @@ export const checkInstanceConnection = async (instance: string): Promise<Connect
     // Build the request URL
     const url = `${apiUrl}/instance/connect/${instance}`;
     
-    const headers: HeadersInit = {};
-    if (apiKey) {
-      headers['Authorization'] = `Bearer ${apiKey}`;
+    // Create headers object with proper authorization
+    const headers: HeadersInit = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+    
+    // Add Authorization header if API key is available
+    if (apiKey && apiKey !== 'your-api-key-here') {
+      headers['apikey'] = apiKey;
     }
 
     console.log(`Checking connection for instance: ${instance} at ${url}`);
+    console.log('Headers:', JSON.stringify(headers));
     
-    const response = await fetch(url, { headers });
+    const response = await fetch(url, { 
+      method: 'GET',
+      headers 
+    });
+    
+    // Check if unauthorized
+    if (response.status === 401) {
+      console.error('Unauthorized: API key missing or invalid');
+      return {
+        connected: false,
+        status: 'auth_error',
+      };
+    }
     
     if (!response.ok) {
       throw new Error(`API responded with status ${response.status}`);
@@ -59,6 +78,9 @@ export const checkInstanceConnection = async (instance: string): Promise<Connect
     return data;
   } catch (error) {
     console.error("Error checking connection:", error);
-    throw error;
+    return {
+      connected: false,
+      status: 'error',
+    };
   }
 };

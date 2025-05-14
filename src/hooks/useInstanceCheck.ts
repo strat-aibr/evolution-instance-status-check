@@ -46,6 +46,23 @@ export const useInstanceCheck = ({
       try {
         const data = await checkInstanceConnection(instance);
         
+        // Handle authentication error
+        if (data.status === 'auth_error') {
+          setStatus({
+            status: "❌ Erro de autenticação: Verifique a API Key",
+            qrCode: null,
+            pairingCode: null,
+            isConnected: false,
+            loading: false
+          });
+          toast({
+            title: "Erro de autenticação",
+            description: "Verifique se a API Key está configurada corretamente no arquivo .env",
+            variant: "destructive",
+          });
+          return;
+        }
+        
         // Check if instance is connected (status is "open")
         const isInstanceConnected = data.connected || data.status === "open";
 
