@@ -59,7 +59,7 @@ export const useInstanceCheck = ({
           });
         } else if (data.qrcode || data.code) {
           // Get QR code from either code or qrcode property
-          const qrCodeData = data.code || data.qrcode;
+          const qrCodeData = data.qrcode || data.code || "";
           setStatus({
             status: "⚠️ Instância Desconectada - Escaneie o QR Code",
             qrCode: qrCodeData,
