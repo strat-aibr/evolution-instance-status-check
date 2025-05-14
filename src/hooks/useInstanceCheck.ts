@@ -45,8 +45,11 @@ export const useInstanceCheck = ({
     const checkConnection = async () => {
       try {
         const data = await checkInstanceConnection(instance);
+        
+        // Check if instance is connected (status is "open")
+        const isInstanceConnected = data.connected || data.status === "open";
 
-        if (data.connected) {
+        if (isInstanceConnected) {
           setStatus({
             status: "✅ Instância Conectada",
             qrCode: null,

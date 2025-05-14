@@ -2,7 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useInstanceCheck } from "@/hooks/useInstanceCheck";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, QrCode } from "lucide-react";
 
 interface InstanceStatusCardProps {
   instance: string;
@@ -39,8 +39,12 @@ const InstanceStatusCard: React.FC<InstanceStatusCardProps> = ({ instance }) => 
           </div>
         )}
 
-        {qrCode && (
+        {!isConnected && qrCode && (
           <div className="flex flex-col items-center space-y-3">
+            <div className="flex items-center justify-center">
+              <QrCode className="h-6 w-6 mr-2" />
+              <h3 className="text-lg font-medium">QR Code de Conexão</h3>
+            </div>
             <img 
               src={`data:image/png;base64,${qrCode}`} 
               alt="QR Code para reconexão" 
@@ -50,9 +54,11 @@ const InstanceStatusCard: React.FC<InstanceStatusCardProps> = ({ instance }) => 
           </div>
         )}
 
-        {pairingCode && (
-          <div className="mt-3 text-center">
-            <p className="font-semibold">Código de pareamento: <span className="bg-gray-100 px-2 py-1 rounded font-mono">{pairingCode}</span></p>
+        {!isConnected && pairingCode && (
+          <div className="mt-3 text-center p-3 bg-blue-50 rounded-md">
+            <p className="font-semibold mb-1">Código de pareamento:</p>
+            <p className="bg-white px-3 py-2 rounded-md font-mono text-lg inline-block">{pairingCode}</p>
+            <p className="text-sm text-gray-500 mt-2">Use este código para conectar sem escanear o QR</p>
           </div>
         )}
       </CardContent>
