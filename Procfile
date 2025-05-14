@@ -1,2 +1,2 @@
 
-web: npx serve -s dist
+web: node_modules/.bin/serve -s dist
