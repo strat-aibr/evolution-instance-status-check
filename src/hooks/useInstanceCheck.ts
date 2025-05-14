@@ -55,7 +55,7 @@ export const useInstanceCheck = ({
             loading: false
           });
         } else if (data.qrcode || data.code) {
-          // Using data.code if it exists (as in your example), otherwise fall back to data.qrcode
+          // Get QR code from either code or qrcode property
           const qrCodeData = data.code || data.qrcode;
           setStatus({
             status: "⚠️ Instância Desconectada - Escaneie o QR Code",
